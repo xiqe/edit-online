@@ -6,6 +6,7 @@
   <meta charset="utf-8"/>
   <link rel="stylesheet" type="text/css" href="lib/codemirror.css">
   <link rel="stylesheet" type="text/css" href="theme/github-markdown.css">
+  <link rel="stylesheet" type="text/css" href="addon/display/fullscreen.css">
   <link href="vs.min.css" rel="stylesheet">
   <script type="text/javascript" src="lib/codemirror.js"></script>
   <script type="text/javascript" src="mode/javascript/javascript.js"></script>
@@ -13,6 +14,8 @@
   <script src="mode/xml/xml.js"></script> 
   <script src="mode/markdown/markdown.js"></script> 
   <script src="mode/htmlmixed/htmlmixed.js"></script>
+  <script src="addon/selection/active-line.js"></script>
+  <script src="addon/display/fullscreen.js"></script>
   <script src="emmet.js"></script> 
   <script src="marked.min.js"></script>
   <script src="highlight.min.js"></script>
@@ -31,27 +34,71 @@
       background: rgb(237, 237, 237);
       border-bottom: hsl(0, 0%, 75%) solid 1px;
       text-align: center;
+      height: 39px;
+      position: relative;
+    }
+    .logo {
+      position: absolute;
+      margin-left:10px;
+      background-color: #777;
+      background-image:
+        linear-gradient(
+          45deg,
+          transparent 45%,
+          hsla(48,20%,90%,1) 45%,
+          hsla(48,20%,90%,1) 55%,
+          transparent 0
+          );
+      background-size: .05em .05em;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      -webkit-text-stroke: 1px #444;
+      font-size: 30px;
+      font-weight: 800;
+    }
+    header .tab {
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 28px;
+      line-height: 28px;
+      margin-top: 5px;
+      background: #fff;
+      height: 28px;
+      overflow: hidden;
     }
     header span {
-      font-size: 14px;
       display: inline-block;
-      border:1px solid #ccc;
-      border-right:0 none;
-      border-radius: 4px 0 0 4px;
+      font-size: 14px;
       text-align: center;
-      width: 120px;
+      width:100px;
       line-height: 28px;
       cursor: pointer;
-    }
-    header span:last-child {
-      border:1px solid #ccc;
-      border-radius: 0 4px 4px 0;
     }
     header span.on {
       background-color: hsl(215, 100%, 96%);
     }
-    header span:hover {
-      background-color: hsl(255, 100%, 100%);
+    header .contorl {
+      position: absolute;
+      right:10px;
+      top:0;
+    }
+    header .contorl a {
+      border: 1px solid rgba(27,31,35,.2);
+      border-radius: .25em;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 12px;
+      line-height: 14px;
+      padding: 4px 8px;
+      position: relative;
+      white-space: nowrap;
+      background-color: #eff3f6;
+      color: #24292e;
+      text-decoration: none;
+    }
+    header .contorl a:hover {
+      background-color: #e6ebf1;
+      border-color: rgba(27,31,35,.35);
     }
     .preview {
       border: none;
@@ -82,7 +129,15 @@
 </head>
 <body>
   <header>
-    <span class="on">HTML</span><span>Markdown</span>
+    <div class="logo">
+      EditOnline
+    </div>
+    <div class="tab">
+      <span class="on">HTML</span><span>Markdown</span>
+    </div>
+    <div class="contorl">
+      <a href="javascript:void(0)" id="nightMode">Night Mode</a>
+    </div>
   </header>
   <iframe id="preview" class="preview"></iframe>
   <div id="mkview" class="preview markdown-body" style="display: none;"></div>
@@ -106,6 +161,7 @@
     <textarea id="MarkdownEdit"># 请开始你的Markdown之旅</textarea>
   </div>
   <script>
+    var night = false;
     var dom = document.getElementById('preview');
     var mkdom = document.getElementById('mkview');
     dom.style.width = document.documentElement.clientWidth/2 + 'px';
@@ -134,6 +190,24 @@
 
     editorMark.on("keyup", function() {
       runMkview()
+    });
+
+    editor.setOption("extraKeys", {
+        "F11": function(cm) {
+            cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+        },
+        "Esc": function(cm) {
+            if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+        }
+    });
+
+    editorMark.setOption("extraKeys", {
+        "F11": function(cm) {
+            cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+        },
+        "Esc": function(cm) {
+            if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+        }
     });
 
     runPreview();
