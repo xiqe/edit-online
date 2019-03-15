@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>edit</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" type="text/css" href="lib/codemirror.css">
+  <link rel="stylesheet" type="text/css" href="theme/github-markdown.css">
+  <script type="text/javascript" src="lib/codemirror.js"></script>
+  <script type="text/javascript" src="mode/javascript/javascript.js"></script>
+  <script src="mode/css/css.js"></script> 
+  <script src="mode/xml/xml.js"></script> 
+  <script src="mode/markdown/markdown.js"></script> 
+  <script src="mode/htmlmixed/htmlmixed.js"></script>
+  <script src="emmet.js"></script> 
+  <script src="marked.min.js"></script>
+
+  <style>
+    * {
+      padding:0;
+      margin:0;
+    }
+    body {
+      font-size: 12px;
+      background: rgb(247, 247, 247);
+    }
+    header {
+      line-height:39px;
+      background: rgb(237, 237, 237);
+      border-bottom: hsl(0, 0%, 75%) solid 1px;
+      text-align: center;
+    }
+    header span {
+      font-size: 14px;
+      display: inline-block;
+      border:1px solid #ccc;
+      border-radius: 4px 0 0 4px;
+      text-align: center;
+      width: 120px;
+      line-height: 28px;
+      cursor: pointer;
+    }
+    header span:last-child {
+      border:1px solid #ccc;
+      border-left:0 none;
+      border-radius: 0 4px 4px 0;
+    }
+    header span.on {
+      background-color: hsl(215, 100%, 96%);
+    }
+    header span:hover {
+      background-color: hsl(255, 100%, 100%);
+    }
+    .preview {
+      border: none;
+      position: absolute;
+      top: 40px;
+      right: 0;
+      bottom: 0;
+      height: 100%;
+      background: white;
+      overflow-y: auto;
+      padding:10px;
+      box-sizing: border-box;
+    }
+    .editbox {
+      position: absolute;
+      top: 40px;
+      width: 50%;
+      bottom: 0;
+      box-sizing: border-box;
+      border-right:1px solid #ddd;
+      overflow-y: auto;
+    }
+    .CodeMirror {
+      height:auto;
+      background: rgb(247, 247, 247);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="on">HTML</span><span>Markdown</span>
+  </header>
+  <iframe id="preview" class="preview"></iframe>
+  <div id="mkview" class="preview markdown-body" style="display: none;"></div>
+  <div class="editbox">
+    <textarea id="htmlEdit">
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Code Edit</title>
+</head>
+<body>
+
+</body>
+</html>
+    </textarea>
+  </div>
+
+  <div class="editbox" style="display: none;">
+    <textarea id="MarkdownEdit">
+# 请开始你的Markdown之旅
+    </textarea>
+  </div>
+  <script>
+    var dom = document.getElementById('preview');
+    var mkdom = document.getElementById('mkview');
+    dom.style.width = document.documentElement.clientWidth/2 + 'px';
+    mkdom.style.width = document.documentElement.clientWidth/2 + 'px';
+    var editor = CodeMirror.fromTextArea(document.getElementById("htmlEdit"), {
+      lineNumbers: false,
+      mode: "htmlmixed",
+      indentUnit: 2,
+      lineWrapping:true,
+      styleActiveLine: true
+    });
+
+    emmetCodeMirror(editor);
+
+    editor.on("keyup", function() {
+      runPreview()
+    });
+
+    var editorMark = CodeMirror.fromTextArea(document.getElementById("MarkdownEdit"), {
+      lineNumbers: false,
+      mode: "markdown",
+      indentUnit: 2,
+      lineWrapping:true,
+      styleActiveLine: true
+    });
+
+    editorMark.on("keyup", function() {
+      runMkview()
+    });
+
+    runPreview();
+    runMkview();
+    tab();
+
+    function runPreview(){
+      dom.contentWindow.document.open();
+      dom.contentWindow.document.write(editor.getValue());
+      dom.contentWindow.document.close();
+    }
+
+    function runMkview(){
+      document.getElementById('mkview').innerHTML = marked(editorMark.getValue());
+    }
+
+    function tab(){
+      var dom = document.getElementsByTagName('header');
+      var btns = dom[0].getElementsByTagName('span');
+      var boxs = document.getElementsByClassName('editbox');
+      var views = document.getElementsByClassName('preview');
+      for(var i=0;i<btns.length;i++){
+        var btn = btns[i];
+        btn.index = i;
+        btn.onclick = function(){
+          for(var j=0;j<btns.length;j++){
+              btns[j].className = '';
+          }
+          this.className = 'on';
+          for(var k = 0;k<boxs.length;k++){
+              boxs[k].style.display = 'none';
+          }
+          boxs[this.index].style.display = 'block';
+          for(var h = 0;h<views.length;h++){
+              views[h].style.display = 'none';
+          }
+          views[this.index].style.display = 'block';
+            
+          editor.refresh();
+          editorMark.refresh();
+        }
+      }
+    }
+  </script>
+</body>
+</html>
