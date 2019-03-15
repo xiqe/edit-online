@@ -26,7 +26,7 @@
       margin:0;
     }
     body {
-      font-size: 12px;
+      font-size: 14px;
       background: rgb(247, 247, 247);
     }
     header {
@@ -53,7 +53,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       -webkit-text-stroke: 1px #444;
-      font-size: 30px;
+      font-size: 24px;
       font-weight: 800;
     }
     header .tab {
@@ -77,10 +77,14 @@
     header span.on {
       background-color: hsl(215, 100%, 96%);
     }
-    header .contorl {
+    header .tips {
       position: absolute;
       right:10px;
       top:0;
+      text-align: right;
+      color:#bbb;
+      font-size:12px;
+      text-shadow: 1px 1px 1px #fff;
     }
     header .contorl a {
       border: 1px solid rgba(27,31,35,.2);
@@ -135,9 +139,7 @@
     <div class="tab">
       <span class="on">HTML</span><span>Markdown</span>
     </div>
-    <div class="contorl">
-      <a href="javascript:void(0)" id="nightMode">Night Mode</a>
-    </div>
+    <div class="tips">F11可开启全屏幕模式</div>
   </header>
   <iframe id="preview" class="preview"></iframe>
   <div id="mkview" class="preview markdown-body" style="display: none;"></div>
