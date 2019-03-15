@@ -140,6 +140,11 @@
     runMkview();
     tab();
 
+    window.onresize = function(){
+      dom.style.width = document.documentElement.clientWidth/2 + 'px';
+      mkdom.style.width = document.documentElement.clientWidth/2 + 'px';
+    }
+
     marked.setOptions({
       highlight: function (code, lang) {
         return hljs.highlightAuto(code).value;
