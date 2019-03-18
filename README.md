@@ -7,7 +7,7 @@
 [在线代码编辑器，点击这里！！！](http://r18.fun/edit-online/)
 
 
-![EditOnline](http://r18.fun/edit-online/editonline.gif)
+![EditOnline](/editonline.gif)
 
 ## 利器
 - [codeMirror](https://codemirror.net/)
