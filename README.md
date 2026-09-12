@@ -1,3 +1,5 @@
+
+
 # 在线代码编辑器--Html/Markdown支持
 
 作为开发者，经常会使用各式编辑器，一个体验良好的编辑器会给使用者舒适的coding体验。  
@@ -44,6 +46,7 @@ var editor = CodeMirror.fromTextArea(document.getElementById("htmlEdit"), {
 	styleActiveLine: true
 });
 ```
+`styleActiveLine` 选项需要加载 `addon/selection/active-line.js`。
 
 ## emmet for CodeMirror
 无论之前editplus用的zencoding，还是sublime开始emmet，如果没有emmet那就没有可用性。基于CodeMirror的emmet使用起来也很方便。
